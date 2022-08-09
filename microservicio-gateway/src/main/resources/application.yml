@@ -1,6 +1,11 @@
 spring:
   cloud:
     gateway:
+      default-filters:
+        -TokenRelay
+      routes:
+        filters:
+          - RemoveRequestHeaders=Cookie
       globalcors:
         cors-configurations:
           '[/**]':
@@ -13,3 +18,21 @@ spring:
               - PUT
               - DELETE
               - OPTIONS
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            authorizationUri: https://localhost:8443/realms/coches-realm/protocol/openid-connect/auth
+            userInfoUri: https://localhost:8443/realms/coches-realm/protocol/openid-connect/userinfo
+            userNameAttribute: preferred_username
+            tokenUri: https://localhost:8443/realms/coches-realm/protocol/openid-connect/token
+        registration:
+          client-name:
+            provider: keycloak
+            clientId: coches-client
+            clientSecret: 1WhrTHUHwJhhxNOAeaseP46QJ2B1Okm4
+            authorizationGrantType: authorization_code
+            redirectUri: https://localhost:8090/login/oauth2/code/coches-client
+
+
